@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package codigo;
 
+import codigo.formas.Circulo;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,7 +9,9 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author mirenordonezdearce
+ * @authors @writters @directors
+ * Mohamed El Boudakhani Ikatouaran
+ * Miren Ordóñez de Arce
  */
 public class VentanaPrincipalGrupal extends javax.swing.JFrame {
 
@@ -21,6 +20,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     //Vamos a declarar una para el buffer y otra para el jpanel.
     Graphics2D bufferGraphics, jpanelGraphics = null;
     
+    //esta variable nos va a servir para saber de qué tipo es la herramienta que se ha seleccionado. 
+    int herramientaSeleccionada = 0;
+    Circulo miCirculo = null;
     /**
      * Creates new form VentanaPrincipal
      */
@@ -63,12 +65,18 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         panelColores1 = new codigo.PanelColores();
+        herramientas1 = new codigo.Herramientas();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel1MouseDragged(evt);
+            }
+        });
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel1MousePressed(evt);
             }
         });
 
@@ -83,12 +91,20 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             .addGap(0, 406, Short.MAX_VALUE)
         );
 
+        herramientas1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                herramientas1MousePressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(115, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -101,21 +117,45 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
-        //Esto nos va a servir para el trazo libre. El dragged es cuando pulsas el ratón y arrastras.
-        bufferGraphics.setColor(panelColores1.colorSeleccionado); //lo que está entre paréntesis, es llamar a la clase panelColores y el color que se haya seleccionado.
-        bufferGraphics.fillOval(evt.getX(), evt.getY(), 3, 3); //las coordenadas de donde ha sucedido el evento, y el grosor que es de 3x3 porque menos no se ve bien.
+        switch(herramientaSeleccionada) {
+            case 0: 
+                //Esto nos va a servir para el trazo libre. El dragged es cuando pulsas el ratón y arrastras.
+                bufferGraphics.setColor(panelColores1.colorSeleccionado); //lo que está entre paréntesis, es llamar a la clase panelColores y el color que se haya seleccionado.
+                bufferGraphics.fillOval(evt.getX(), evt.getY(), 3, 3); //las coordenadas de donde ha sucedido el evento, y el grosor que es de 3x3 porque menos no se ve bien.
+                
+                break;
+            
+            case 1: miCirculo.dibujate(bufferGraphics, evt.getX());break;
+                
+        }
         repaint(0,0,1,1); //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
     }//GEN-LAST:event_jPanel1MouseDragged
+
+    private void herramientas1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herramientas1MousePressed
+        herramientaSeleccionada = 1; //cambio a pintar circulos
+    }//GEN-LAST:event_herramientas1MousePressed
+
+    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
+        switch(herramientaSeleccionada) {
+            case 0: break;
+            
+            //el caso 1 crea un círculo desde donde se haga click en la pantalla
+            case 1: miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado, false); 
+                    miCirculo.dibujate(bufferGraphics, evt.getX());break;
+        }
+    }//GEN-LAST:event_jPanel1MousePressed
 
     /**
      * @param args the command line arguments
@@ -156,6 +196,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private codigo.Herramientas herramientas1;
     private javax.swing.JPanel jPanel1;
     private codigo.PanelColores panelColores1;
     // End of variables declaration//GEN-END:variables
