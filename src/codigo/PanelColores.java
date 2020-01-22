@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package codigo;
 
 import java.awt.Color;
@@ -10,7 +6,9 @@ import javax.swing.JLabel;
 
 /**
  *
- * @author mirenordonezdearce
+ * @author @writters @directors
+ * Mohamed El Boudakhani Ikatouaran
+ * Miren Ordóñez de Arce
  */
 public class PanelColores extends javax.swing.JPanel {
     
@@ -94,6 +92,11 @@ public class PanelColores extends javax.swing.JPanel {
         rojo.setBackground(new java.awt.Color(255, 0, 0));
         rojo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         rojo.setOpaque(true);
+        rojo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                rojoMousePressed(evt);
+            }
+        });
 
         blanco.setBackground(new java.awt.Color(255, 255, 255));
         blanco.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -280,6 +283,12 @@ public class PanelColores extends javax.swing.JPanel {
         colorSeleccionado = s.getBackground();
         colorElegido.setBackground(colorSeleccionado);
     }//GEN-LAST:event_verdeOscuroMousePressed
+
+    private void rojoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rojoMousePressed
+        JLabel s = (JLabel) evt.getSource();
+        colorSeleccionado = s.getBackground();
+        colorElegido.setBackground(colorSeleccionado);
+    }//GEN-LAST:event_rojoMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
