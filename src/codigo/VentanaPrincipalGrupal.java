@@ -18,10 +18,11 @@ import java.awt.image.BufferedImage;
  */
 public class VentanaPrincipalGrupal extends javax.swing.JFrame {
 
-    BufferedImage buffer = null;
+    //Vamos a tener un segundo buffer que nos ayudará a la hora de pintar la forma final. 
+    BufferedImage buffer, buffer2 = null;
     //Graphics2D es una librería de java que nos va a permitir hacer los triángulos, cuadrados y demás. 
     //Vamos a declarar una para el buffer y otra para el jpanel.
-    Graphics2D bufferGraphics, jpanelGraphics = null;
+    Graphics2D bufferGraphics, bufferGraphics2, jpanelGraphics = null;
     
     
     Circulo miCirculo = null;
@@ -37,11 +38,16 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     private void inicializaBuffers() {
         //Voy a crear una imagen del mismo ancho y alto que el jPanel1.
         buffer = (BufferedImage)jPanel1.createImage(jPanel1.getWidth(), jPanel1.getHeight());
+        buffer2 = (BufferedImage)jPanel1.createImage(jPanel1.getWidth(), jPanel1.getHeight());
         //Creo una imagen modificable, que va a ser de tipo graphics2D. 
         bufferGraphics = buffer.createGraphics();
+        bufferGraphics2 = buffer2.createGraphics();
         //Inicializo el buffer para que se pinte de blanco entero.
         bufferGraphics.setColor(Color.WHITE);
         bufferGraphics.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+        
+        bufferGraphics2.setColor(Color.WHITE);
+        bufferGraphics2.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
         
         jpanelGraphics = (Graphics2D) jPanel1.getGraphics(); //Enlace el jPanel Graphics con el jPanel normal.
     }
@@ -80,6 +86,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jPanel1MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jPanel1MouseReleased(evt);
             }
         });
 
@@ -128,6 +137,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
+        bufferGraphics.drawImage(buffer2, 0, 0, null); //esto va a coger la pantalla, la borra entera y deja el buffer2 con la forma final elegida. 
         switch(herramientas1.formaElegida) {
             case 0: 
                 //Esto nos va a servir para el trazo libre. El dragged es cuando pulsas el ratón y arrastras.
@@ -161,6 +171,11 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                        miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
         }
     }//GEN-LAST:event_jPanel1MousePressed
+
+    private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
+        //Esto va a hacer que finalmente se guarde la forma elegida, SALVO EL CÍRCULO. 
+        miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY()); 
+    }//GEN-LAST:event_jPanel1MouseReleased
 
     /**
      * @param args the command line arguments
