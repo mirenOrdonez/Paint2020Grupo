@@ -6,6 +6,9 @@
 package codigo;
 
 import codigo.formas.Circulo;
+import codigo.formas.Estrella;
+import codigo.formas.Forma;
+import codigo.formas.Pentagono;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -26,6 +29,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
    
     
     Circulo miCirculo = null;
+    Forma miForma;
+    
+    
     
     
     
@@ -56,10 +62,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
       //Añadimos que en el jPanel se dibuje la imagen. Pinto el buffer sobre el jPanel.
       jpanelGraphics.drawImage(buffer, 0, 0, null); //le dice que sea una imagen, en la posición (0,0), y null porque sí.
       
-    }
-    
-    
-    
+    } 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -136,10 +139,11 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         bufferGraphics.fillOval(evt.getX(), evt.getY(), 3, 3); //las coordenadas de donde ha sucedido el evento, y el grosor que es de 3x3 porque menos no se ve bien.
         break; //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
        //Quiero hacer un clik en la pantalla para dibujar un circulo. Para ello necesito un boton.
-            case 1 : miCirculo.dibujate(bufferGraphics, evt.getX()); break;
+             case 1 : miCirculo.dibujate(bufferGraphics, evt.getX());break;
+            case 5 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
+            case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;          
                     
-           
-        }
+              }
         repaint(0,0,1,1);
     }//GEN-LAST:event_jPanel1MouseDragged
 
@@ -149,6 +153,11 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 1 : miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado, true);
             miCirculo.dibujate(bufferGraphics, evt.getX());
             break;
+            case 5 : miForma = new Pentagono(evt.getX(), evt.getY(), 5, panelColores1.colorSeleccionado , false);
+                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break; 
+            case 256: miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado , false);
+                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_jPanel1MousePressed
     
