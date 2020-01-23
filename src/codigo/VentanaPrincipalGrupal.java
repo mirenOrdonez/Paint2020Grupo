@@ -20,8 +20,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     //Vamos a declarar una para el buffer y otra para el jpanel.
     Graphics2D bufferGraphics, jpanelGraphics = null;
     
-    //esta variable nos va a servir para saber de qué tipo es la herramienta que se ha seleccionado. 
-    int herramientaSeleccionada = 0;
+    
     Circulo miCirculo = null;
     /**
      * Creates new form VentanaPrincipal
@@ -125,7 +124,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
-        switch(herramientaSeleccionada) {
+        switch(herramientas1.formaElegida) {
             case 0: 
                 //Esto nos va a servir para el trazo libre. El dragged es cuando pulsas el ratón y arrastras.
                 bufferGraphics.setColor(panelColores1.colorSeleccionado); //lo que está entre paréntesis, es llamar a la clase panelColores y el color que se haya seleccionado.
@@ -134,6 +133,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                 break;
             
             case 1: miCirculo.dibujate(bufferGraphics, evt.getX());break;
+            
+            
                 
         }
         repaint(0,0,1,1); //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
