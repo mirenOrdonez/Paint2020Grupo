@@ -2,6 +2,9 @@
 package codigo;
 
 import codigo.formas.Circulo;
+import codigo.formas.Estrella;
+import codigo.formas.Forma;
+import codigo.formas.Pentagono;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,6 +25,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     
     
     Circulo miCirculo = null;
+    Forma miForma = null;
     /**
      * Creates new form VentanaPrincipal
      */
@@ -134,7 +138,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             
             case 1: miCirculo.dibujate(bufferGraphics, evt.getX());break;
             
+            case 5: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
+            case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
                 
         }
         repaint(0,0,1,1); //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
@@ -147,6 +153,12 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             //el caso 1 crea un círculo desde donde se haga click en la pantalla
             case 1: miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado, false); 
                     miCirculo.dibujate(bufferGraphics, evt.getX());break;
+                    
+            case 5: miForma = new Pentagono(evt.getX(), evt.getY(), 5, panelColores1.colorSeleccionado, false);
+                    miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
+            
+            case 256:  miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado, false);
+                       miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
         }
     }//GEN-LAST:event_jPanel1MousePressed
 
