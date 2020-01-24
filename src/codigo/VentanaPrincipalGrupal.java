@@ -25,16 +25,10 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     //Vamos a declarar una para el buffer y otra para el jpanel.
     Graphics2D bufferGraphics, bufferGraphics2, jpanelGraphics = null;
     
-    
-   
-    
+       
     Circulo miCirculo = null;
-    Forma miForma = null;
-    
-    
-    
-    
-    
+    Forma miForma = new Forma(-1,-1,1,Color.white,false);//para que la forma no de error
+        
     /**
      * Creates new form VentanaPrincipal
      */
@@ -162,19 +156,23 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
          switch(herramientas1.formaElegida){
             case 0 : break;
-            case 1 : miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado, true);
+            case 1 : miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado,herramientas1.relleno);
             miCirculo.dibujate(bufferGraphics, evt.getX());
             break;
-            case 5 : miForma = new Pentagono(evt.getX(), evt.getY(), 5, panelColores1.colorSeleccionado , true);
+            case 5 : miForma = new Pentagono(evt.getX(), evt.getY(), 5, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break; 
-            case 256: miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado , true);
+            case 256: miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
         miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
+        //Si es el circulo lo dibuja sobre el buffer 2.
+        if (herramientas1.formaElegida == 1){
+            miCirculo.dibujate(bufferGraphics2, evt.getX());
+        }
         
     }//GEN-LAST:event_jPanel1MouseReleased
     
