@@ -15,6 +15,7 @@ import codigo.formas.Heptagono;
 import codigo.formas.Hexagono;
 import codigo.formas.Octogono;
 import codigo.formas.Pentagono;
+import codigo.formas.TrianguloEquilatero;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -152,7 +153,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         break; //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
        //Quiero hacer un clik en la pantalla para dibujar un circulo. Para ello necesito un boton.
             case 1 : miCirculo.dibujate(bufferGraphics, evt.getX());break;
-            case 4 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+            case 3 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
+            case 4 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 5 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 6 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 7 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
@@ -171,6 +173,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 1 : miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado,herramientas1.relleno);
             miCirculo.dibujate(bufferGraphics, evt.getX());
             break;
+            case 3 : miForma = new TrianguloEquilatero(evt.getX(), evt.getY(), 3, panelColores1.colorSeleccionado ,herramientas1.relleno);
+                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break; 
             case 4 : miForma = new Cuadrado(evt.getX(), evt.getY(), 4, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break; 
