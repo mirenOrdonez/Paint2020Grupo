@@ -26,7 +26,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     
     
     Circulo miCirculo = null;
-    Forma miForma = null;
+    Forma miForma = new Forma (-1, -1, 1, Color.WHITE, false);
     /**
      * Creates new form VentanaPrincipal
      */
@@ -141,8 +141,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         switch(herramientas1.formaElegida) {
             case 0: 
                 //Esto nos va a servir para el trazo libre. El dragged es cuando pulsas el ratón y arrastras.
-                bufferGraphics.setColor(panelColores1.colorSeleccionado); //lo que está entre paréntesis, es llamar a la clase panelColores y el color que se haya seleccionado.
-                bufferGraphics.fillOval(evt.getX(), evt.getY(), 3, 3); //las coordenadas de donde ha sucedido el evento, y el grosor que es de 3x3 porque menos no se ve bien.
+                bufferGraphics2.setColor(panelColores1.colorSeleccionado); //lo que está entre paréntesis, es llamar a la clase panelColores y el color que se haya seleccionado.
+                bufferGraphics2.fillOval(evt.getX(), evt.getY(), 3, 3); //las coordenadas de donde ha sucedido el evento, y el grosor que es de 3x3 porque menos no se ve bien.
                 
                 break;
             
@@ -161,20 +161,24 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 0: break;
             
             //el caso 1 crea un círculo desde donde se haga click en la pantalla
-            case 1: miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado, false); 
+            case 1: miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado, herramientas1.relleno); 
                     miCirculo.dibujate(bufferGraphics, evt.getX());break;
                     
-            case 5: miForma = new Pentagono(evt.getX(), evt.getY(), 5, panelColores1.colorSeleccionado, false);
+            case 5: miForma = new Pentagono(evt.getX(), evt.getY(), 5, panelColores1.colorSeleccionado, herramientas1.relleno);
                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
-            case 256:  miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado, false);
+            case 256:  miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado, herramientas1.relleno);
                        miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
         }
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
-        //Esto va a hacer que finalmente se guarde la forma elegida, SALVO EL CÍRCULO. 
+        //Esto va a hacer que finalmente se guarde la forma elegida, SALVO EL CÍRCULO. (SOLUCIONADO CÍRCULO) 
         miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY()); 
+        //Para el círculo, que se mantenga en la pantalla después de soltar el ratón. 
+        if (herramientas1.formaElegida == 1) {
+            miCirculo.dibujate(bufferGraphics2, evt.getX());
+        }
     }//GEN-LAST:event_jPanel1MouseReleased
 
     /**
