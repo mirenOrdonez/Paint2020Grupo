@@ -11,6 +11,7 @@ import codigo.formas.Heptagono;
 import codigo.formas.Hexagono;
 import codigo.formas.Octogono;
 import codigo.formas.Pentagono;
+import codigo.formas.TrianguloEquilatero;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -151,10 +152,11 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                 bufferGraphics2.fillOval(evt.getX(), evt.getY(), 3, 3); //las coordenadas de donde ha sucedido el evento, y el grosor que es de 3x3 porque menos no se ve bien.
                 
                 break;
-             
-            case 4: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
+            case 1: miCirculo.dibujate(bufferGraphics, evt.getX());break; 
             
-            case 1: miCirculo.dibujate(bufferGraphics, evt.getX());break;
+            case 3: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
+            
+            case 4: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
             case 5: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
@@ -181,6 +183,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             //el caso 1 crea un círculo desde donde se haga click en la pantalla
             case 1: miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado, herramientas1.relleno); 
                     miCirculo.dibujate(bufferGraphics, evt.getX());break;
+                    
+            case 3: miForma = new TrianguloEquilatero(evt.getX(), evt.getY(), 3, panelColores1.colorSeleccionado, herramientas1.relleno);
+                    miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
                     
             case 4: miForma = new Cuadrado(evt.getX(), evt.getY(), 4, panelColores1.colorSeleccionado, herramientas1.relleno);
                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
