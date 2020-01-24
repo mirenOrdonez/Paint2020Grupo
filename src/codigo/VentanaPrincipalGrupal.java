@@ -7,6 +7,7 @@ package codigo;
 
 import codigo.formas.Circulo;
 import codigo.formas.Cuadrado;
+import codigo.formas.Eneagono;
 import codigo.formas.Estrella;
 import codigo.formas.Forma;
 import codigo.formas.Heptagono;
@@ -155,6 +156,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 6 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 7 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 8 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
+            case 9 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;          
                     
               }
@@ -179,6 +181,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break;
             case 8 : miForma = new Octogono (evt.getX(), evt.getY(), 8, panelColores1.colorSeleccionado ,herramientas1.relleno);
+                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break;
+            case 9 : miForma = new Eneagono (evt.getX(), evt.getY(), 9, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break;
             case 256: miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado ,herramientas1.relleno);
