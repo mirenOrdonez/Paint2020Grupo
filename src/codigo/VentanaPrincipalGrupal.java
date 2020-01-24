@@ -9,6 +9,8 @@ import codigo.formas.Circulo;
 import codigo.formas.Cuadrado;
 import codigo.formas.Estrella;
 import codigo.formas.Forma;
+import codigo.formas.Heptagono;
+import codigo.formas.Hexagono;
 import codigo.formas.Pentagono;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -149,6 +151,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 1 : miCirculo.dibujate(bufferGraphics, evt.getX());break;
             case 4 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
             case 5 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
+            case 6 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
+            case 7 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;          
                     
               }
@@ -166,7 +170,12 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                 break; 
             case 5 : miForma = new Pentagono(evt.getX(), evt.getY(), 5, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
-                break; 
+            case 6 : miForma = new Hexagono(evt.getX(), evt.getY(), 6, panelColores1.colorSeleccionado ,herramientas1.relleno);
+                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break;
+            case 7 : miForma = new Heptagono (evt.getX(), evt.getY(), 6, panelColores1.colorSeleccionado ,herramientas1.relleno);
+                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break;
             case 256: miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
         }
