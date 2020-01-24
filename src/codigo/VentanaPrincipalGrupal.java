@@ -6,6 +6,7 @@
 package codigo;
 
 import codigo.formas.Circulo;
+import codigo.formas.Cuadrado;
 import codigo.formas.Estrella;
 import codigo.formas.Forma;
 import codigo.formas.Pentagono;
@@ -145,7 +146,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         bufferGraphics.fillOval(evt.getX(), evt.getY(), 3, 3); //las coordenadas de donde ha sucedido el evento, y el grosor que es de 3x3 porque menos no se ve bien.
         break; //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
        //Quiero hacer un clik en la pantalla para dibujar un circulo. Para ello necesito un boton.
-             case 1 : miCirculo.dibujate(bufferGraphics, evt.getX());break;
+            case 1 : miCirculo.dibujate(bufferGraphics, evt.getX());break;
+            case 4 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
             case 5 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;          
                     
@@ -159,6 +161,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 1 : miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado,herramientas1.relleno);
             miCirculo.dibujate(bufferGraphics, evt.getX());
             break;
+            case 4 : miForma = new Cuadrado(evt.getX(), evt.getY(), 4, panelColores1.colorSeleccionado ,herramientas1.relleno);
+                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
+                break; 
             case 5 : miForma = new Pentagono(evt.getX(), evt.getY(), 5, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                 break; 
