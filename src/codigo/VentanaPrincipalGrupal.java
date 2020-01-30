@@ -12,14 +12,13 @@ import codigo.formas.Hexagono;
 import codigo.formas.Octogono;
 import codigo.formas.Pentagono;
 import codigo.formas.TrianguloEquilatero;
+import codigo.lineas.Recta;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -41,6 +40,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     
     Circulo miCirculo = null;
     Forma miForma = new Forma (-1, -1, 1, Color.WHITE, false);
+    Recta miRecta = null;
+    
     /**
      * Creates new form VentanaPrincipal
      */
@@ -75,8 +76,6 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
       jpanelGraphics.drawImage(buffer, 0, 0, null); //le dice que sea una imagen, en la posición (0,0), y null porque sí.
       
     }
-    
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -225,33 +224,29 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1)
-                        .addGap(95, 95, 95))))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(65, 65, 65))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(panelColores1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(herramientas1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -285,6 +280,10 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 10: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
             case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
+            
+            //Esto para la goma de borrar.
+            case 1000: bufferGraphics2.setColor(Color.WHITE); 
+                       bufferGraphics2.fillOval(evt.getX(), evt.getY(), 10, 10); break;
                 
         }
         repaint(0,0,1,1); //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
@@ -321,15 +320,20 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                     
             case 10: miForma = new Decagono(evt.getX(), evt.getY(), 10, panelColores1.colorSeleccionado, herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
-            
+              
             case 256:  miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado, herramientas1.relleno);
                        miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
+                       
+            case 1000: break; //Para la goma de borrar.
         }
+        
+       
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
         //Esto va a hacer que finalmente se guarde la forma elegida, SALVO EL CÍRCULO. (SOLUCIONADO CÍRCULO) 
         miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY()); 
+         
         //Para el círculo, que se mantenga en la pantalla después de soltar el ratón. 
         if (herramientas1.formaElegida == 1) {
             miCirculo.dibujate(bufferGraphics2, evt.getX());
