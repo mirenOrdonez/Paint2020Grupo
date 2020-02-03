@@ -15,10 +15,12 @@ import codigo.formas.Heptagono;
 import codigo.formas.Hexagono;
 import codigo.formas.Octogono;
 import codigo.formas.Pentagono;
+import codigo.formas.Recta;
 import codigo.formas.TrianguloEquilatero;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author mirenordonezdearce
  */
 public class VentanaPrincipalGrupal extends javax.swing.JFrame {
+    
+        
 
     BufferedImage buffer, buffer2 = null;
     //Graphics2D es una librería de java que nos va a permitir hacer los triángulos, cuadrados y demás. 
@@ -40,14 +44,23 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
        
     Circulo miCirculo = null;
     Forma miForma = new Forma(-1,-1,1,Color.white,false);//para que la forma no de error
+    Line2D.Double miRecta = null;
+    //creamos 2 coordenada y las declaramos
+    int x1,x2,y1,y2 = 0;
+    
         
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipalGrupal() {
+       
+        
         initComponents();
         inicializaBuffers();
         jDialog1.setSize(640,450);
+        miRecta = new Line2D.Double();
+        
+        
     }
 
     private void inicializaBuffers() {
@@ -258,6 +271,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
         //con el bufferGraphics se dibuja un circulo y el anterior se borra
+        
         bufferGraphics.drawImage(buffer2, 0, 0, null);
         switch (herramientas1.formaElegida){
             case 0 :
@@ -268,6 +282,12 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
        //Quiero hacer un clik en la pantalla para dibujar un circulo. Para ello necesito un boton.
             case 1 : miCirculo.dibujate(bufferGraphics, evt.getX());break;
             
+            case 2:
+                    bufferGraphics.setColor(panelColores1.colorSeleccionado);
+                    miRecta.x2  = evt.getX();
+                    miRecta.y2 = evt.getY();
+                    bufferGraphics.draw(miRecta);
+            break;            
             case 3 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 4 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 5 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
@@ -279,6 +299,18 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 1000: bufferGraphics2.setColor(Color.WHITE); 
                        bufferGraphics2.fillOval(evt.getX(), evt.getY(), 10, 10);break;
+            case 11: // guardo el fin del trazo en el que estoy y lo pinta y inicializamos
+                //el siguiente trazo con el fin del anterior.
+                x2= evt.getX();
+                y2=evt.getY();
+                if (x1!=x2 || y1!=y2){
+                    bufferGraphics2.setColor(panelColores1.colorSeleccionado);
+                    bufferGraphics2.drawLine(x1, y1, x2, y2);
+                    x1=x2;
+                    y1=y2;
+                }
+                break;
+                
             
                     
               }
@@ -291,7 +323,13 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 1 : miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado,herramientas1.relleno);
             miCirculo.dibujate(bufferGraphics, evt.getX());
             break;
-            
+            case 2:
+                miRecta = new Line2D.Double();
+                miRecta.x1  = evt.getX();
+                miRecta.y1 = evt.getY();
+                
+                
+            break;    
                      
             case 3 : miForma = new TrianguloEquilatero(evt.getX(), evt.getY(), 3, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
@@ -319,16 +357,26 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 256: miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado ,herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());
                      
-            case 1000:break;
+            case 1000: break;
+            //usa los eventos del raton y guarda los puntos del siguiente trazo.
+            case 11: x1  = evt.getX();
+                     y1 = evt.getY();break;
         }
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
-        miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
+        /*miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
         //Si es el circulo lo dibuja sobre el buffer 2.
         if (herramientas1.formaElegida == 1){
             miCirculo.dibujate(bufferGraphics2, evt.getX());
         }
+        */
+        miRecta.x2  = evt.getX();
+        miRecta.y2 = evt.getY();
+        
+        bufferGraphics2.setColor(panelColores1.colorSeleccionado);
+        bufferGraphics2.draw(miRecta);
+        
         
     }//GEN-LAST:event_jPanel1MouseReleased
 
