@@ -5,6 +5,7 @@
  */
 package codigo.formas;
 
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -17,6 +18,7 @@ public class Forma extends Polygon {
     public Color color = null;
     public boolean relleno = false;
     
+
     //coordenadas del centro de la forma
     public int x = 0;
     public int y = 0;

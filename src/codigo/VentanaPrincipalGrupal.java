@@ -12,15 +12,19 @@ import codigo.formas.Hexagono;
 import codigo.formas.Octogono;
 import codigo.formas.Pentagono;
 import codigo.formas.TrianguloEquilatero;
-import java.awt.Color;
+import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Color;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -40,7 +44,11 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     Circulo miCirculo = null;
     Forma miForma = new Forma (-1, -1, 1, Color.WHITE, false);
     
+    Line2D.Double miRecta = null;
+    //creamos 2 coordenada y las declaramos
+    int x1,x2,y1,y2 = 0;
     
+    BasicStroke s ;
     
     
     /**
@@ -50,17 +58,64 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         initComponents();
         inicializaBuffers();
         jDialog1.setSize(640, 450); //Para el cuadro de colores que va a aparecer cuando se pulse el Panel de Colores
+        miRecta = new Line2D.Double();
         
-        
+        //PARA LOS ICONOS. 
+        //círculo
+        herramientas1.jLabel1.setIcon(new ImageIcon(
+            new ImageIcon(getClass().getResource("/imagenes/circulo.png")).getImage()
+                    .getScaledInstance(herramientas1.jLabel1.getWidth(), herramientas1.jLabel1.getHeight(), Image.SCALE_DEFAULT)
+                
+        ));
+        //lapiz
+        herramientas1.jLabel5.setIcon(new ImageIcon(
+            new ImageIcon(getClass().getResource("/imagenes/lapiz.png")).getImage()
+                    .getScaledInstance(herramientas1.jLabel5.getWidth(), herramientas1.jLabel5.getHeight(), Image.SCALE_DEFAULT)
+                
+        ));
+        //borrador
+        herramientas1.jLabel15.setIcon(new ImageIcon(
+            new ImageIcon(getClass().getResource("/imagenes/borrador.png")).getImage()
+                    .getScaledInstance(herramientas1.jLabel15.getWidth(), herramientas1.jLabel15.getHeight(), Image.SCALE_DEFAULT)
+                
+        ));
+        //cuadrado
+        herramientas1.jLabel2.setIcon(new ImageIcon(
+            new ImageIcon(getClass().getResource("/imagenes/cuadrado.png")).getImage()
+                    .getScaledInstance(herramientas1.jLabel2.getWidth(), herramientas1.jLabel2.getHeight(), Image.SCALE_DEFAULT)
+                
+        ));
+        //triangulo
+        herramientas1.jLabel9.setIcon(new ImageIcon(
+            new ImageIcon(getClass().getResource("/imagenes/triangulo.png")).getImage()
+                    .getScaledInstance(herramientas1.jLabel9.getWidth(), herramientas1.jLabel9.getHeight(), Image.SCALE_DEFAULT)
+                
+        ));
+        //estrella
+        herramientas1.jLabel4.setIcon(new ImageIcon(
+            new ImageIcon(getClass().getResource("/imagenes/estrella.png")).getImage()
+                    .getScaledInstance(herramientas1.jLabel4.getWidth(), herramientas1.jLabel4.getHeight(), Image.SCALE_DEFAULT)
+                
+        ));
+        //recta
+        herramientas1.jLabel14.setIcon(new ImageIcon(
+            new ImageIcon(getClass().getResource("/imagenes/recta.png")).getImage()
+                    .getScaledInstance(herramientas1.jLabel14.getWidth(), herramientas1.jLabel14.getHeight(), Image.SCALE_DEFAULT)
+                
+        ));
     }
 
     private void inicializaBuffers() {
         //Voy a crear una imagen del mismo ancho y alto que el jPanel1.
         buffer = (BufferedImage)jPanel1.createImage(jPanel1.getWidth(), jPanel1.getHeight());
         buffer2 = (BufferedImage)jPanel1.createImage(jPanel1.getWidth(), jPanel1.getHeight());
+        
+        
         //Creo una imagen modificable, que va a ser de tipo graphics2D. 
         bufferGraphics = buffer.createGraphics();
         bufferGraphics2 = buffer2.createGraphics();
+        
+      
         //Inicializo el buffer para que se pinte de blanco entero.
         bufferGraphics.setColor(Color.WHITE);
         bufferGraphics.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
@@ -69,6 +124,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         bufferGraphics2.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
         
         jpanelGraphics = (Graphics2D) jPanel1.getGraphics(); //Enlace el jPanel Graphics con el jPanel normal.
+       
     }
     
     //Vamos a enlazar el panel con la zona de memoria en la que estás dibujando. 
@@ -77,7 +133,6 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
       super.paint(g);  //llama a la clase que estoy extendiendo que es la de jFrame, que tiene un método paint.
       //Añadimos que en el jPanel se dibuje la imagen. Pinto el buffer sobre el jPanel.
       jpanelGraphics.drawImage(buffer, 0, 0, null); //le dice que sea una imagen, en la posición (0,0), y null porque sí.
-      
       
     }
     
@@ -100,12 +155,13 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         panelColores1 = new codigo.PanelColores();
         herramientas1 = new codigo.Herramientas();
         jButton1 = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -166,6 +222,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(205, 240, 219));
 
         jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -199,7 +256,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox1.setText("jCheckBox1");
+        jMenuBar1.setBackground(new java.awt.Color(255, 203, 159));
 
         jMenu1.setText("File");
 
@@ -219,9 +276,26 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
+        jMenuItem4.setText("New");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        jMenuItem3.setText("Borrar todo");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -232,10 +306,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -247,14 +319,11 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(240, 240, 240)
-                        .addComponent(jCheckBox1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(herramientas1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -267,13 +336,13 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
         bufferGraphics.drawImage(buffer2, 0, 0, null); //esto va a coger la pantalla, la borra entera y deja el buffer2 con la forma final elegida. 
         switch(herramientas1.formaElegida) {
-            case 0: 
-                //Esto nos va a servir para el trazo libre. El dragged es cuando pulsas el ratón y arrastras.
-                bufferGraphics2.setColor(panelColores1.colorSeleccionado); //lo que está entre paréntesis, es llamar a la clase panelColores y el color que se haya seleccionado.
-                bufferGraphics2.fillOval(evt.getX(), evt.getY(), herramientas1.grosor, herramientas1.grosor); //las coordenadas de donde ha sucedido el evento, y el grosor que es de 3x3 porque menos no se ve bien.
-                
-                break;
             case 1: miCirculo.dibujate(bufferGraphics, evt.getX());break; 
+            
+            case 2: bufferGraphics.setColor(panelColores1.colorSeleccionado);
+                    miRecta.x2  = evt.getX();
+                    miRecta.y2 = evt.getY();
+                    bufferGraphics.draw(miRecta);
+                    break;   
             
             case 3: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
@@ -291,6 +360,20 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             
             case 10: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
+            case 11: // guardo el fin del trazo en el que estoy y lo pinta y inicializamos
+                    //el siguiente trazo con el fin del anterior.
+                    x2= evt.getX();
+                    y2=evt.getY();
+                    s =  new BasicStroke(herramientas1.grosor);
+                    if (x1!=x2 || y1!=y2){
+                        bufferGraphics2.setColor(panelColores1.colorSeleccionado);
+                        bufferGraphics2.setStroke(s);
+                        bufferGraphics2.drawLine(x1, y1, x2, y2);
+                        x1=x2;
+                        y1=y2;
+                    }
+                    break;
+            
             case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
             //Esto para la goma de borrar.
@@ -299,16 +382,20 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                 
         }
         
+        
         repaint(0,0,1,1); //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
     }//GEN-LAST:event_jPanel1MouseDragged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         switch(herramientas1.formaElegida) {
-            case 0: break;
-            
             //el caso 1 crea un círculo desde donde se haga click en la pantalla
             case 1: miCirculo = new Circulo(evt.getX(), evt.getY(), 1, panelColores1.colorSeleccionado, herramientas1.relleno); 
                     miCirculo.dibujate(bufferGraphics, evt.getX());break;
+                   
+            case 2: miRecta = new Line2D.Double();
+                    miRecta.x1  = evt.getX();
+                    miRecta.y1 = evt.getY();
+                    break;    
              
             case 3: miForma = new TrianguloEquilatero(evt.getX(), evt.getY(), 3, panelColores1.colorSeleccionado, herramientas1.relleno);
                     miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
@@ -333,13 +420,26 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                     
             case 10: miForma = new Decagono(evt.getX(), evt.getY(), 10, panelColores1.colorSeleccionado, herramientas1.relleno);
                      miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
-              
+                     
+            //usa los eventos del raton y guarda los puntos del siguiente trazo.
+            case 11: x1  = evt.getX();
+                     y1 = evt.getY();
+                     break;
+            
+            //Para la pipeta
+            case 88: int color = buffer.getRGB(evt.getX(), evt.getY());
+                     panelColores1.colorSeleccionado = new Color(color);
+                     panelColores1.cambiarFondo(panelColores1.colorSeleccionado);
+                
             case 256:  miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado, herramientas1.relleno);
                        miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
                        
             case 1000: break; //Para la goma de borrar.
            
         }
+        
+        
+        
         
     }//GEN-LAST:event_jPanel1MousePressed
 
@@ -351,6 +451,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         if (herramientas1.formaElegida == 1) {
             miCirculo.dibujate(bufferGraphics2, evt.getX());
         }
+
+
     }//GEN-LAST:event_jPanel1MouseReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -408,6 +510,15 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+       
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    
+    
     
     /**
      * @param args the command line arguments
@@ -452,7 +563,6 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
@@ -462,6 +572,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private codigo.PanelColores panelColores1;
     // End of variables declaration//GEN-END:variables

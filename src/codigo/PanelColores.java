@@ -290,6 +290,9 @@ public class PanelColores extends javax.swing.JPanel {
         colorElegido.setBackground(colorSeleccionado);
     }//GEN-LAST:event_rojoMousePressed
 
+    public void cambiarFondo(Color color) {
+        colorElegido.setBackground(color);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel amarillo;
