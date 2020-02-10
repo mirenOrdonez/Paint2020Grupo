@@ -37,7 +37,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     //Vamos a tener un segundo buffer que nos ayudará a la hora de pintar la forma final. 
     BufferedImage buffer, buffer2 = null;
     //Graphics2D es una librería de java que nos va a permitir hacer los triángulos, cuadrados y demás. 
-    //Vamos a declarar una para el buffer y otra para el jpanel.
+    //Vamos a declarar una para cada buffer y otra para el jpanel.
     Graphics2D bufferGraphics, bufferGraphics2, jpanelGraphics = null;
 
     
@@ -103,6 +103,12 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                     .getScaledInstance(herramientas1.jLabel14.getWidth(), herramientas1.jLabel14.getHeight(), Image.SCALE_DEFAULT)
                 
         ));
+        //pipeta
+        herramientas1.jLabel17.setIcon(new ImageIcon(
+            new ImageIcon(getClass().getResource("/imagenes/pipeta.png")).getImage()
+                    .getScaledInstance(herramientas1.jLabel17.getWidth(), herramientas1.jLabel17.getHeight(), Image.SCALE_DEFAULT)
+                
+        ));
     }
 
     private void inicializaBuffers() {
@@ -110,11 +116,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         buffer = (BufferedImage)jPanel1.createImage(jPanel1.getWidth(), jPanel1.getHeight());
         buffer2 = (BufferedImage)jPanel1.createImage(jPanel1.getWidth(), jPanel1.getHeight());
         
-        
         //Creo una imagen modificable, que va a ser de tipo graphics2D. 
         bufferGraphics = buffer.createGraphics();
         bufferGraphics2 = buffer2.createGraphics();
-        
       
         //Inicializo el buffer para que se pinte de blanco entero.
         bufferGraphics.setColor(Color.WHITE);
@@ -222,7 +226,6 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(205, 240, 219));
 
         jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -255,8 +258,6 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jMenuBar1.setBackground(new java.awt.Color(255, 203, 159));
 
         jMenu1.setText("File");
 
@@ -306,7 +307,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -377,13 +378,20 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
             
             //Esto para la goma de borrar.
-            case 1000: bufferGraphics2.setColor(Color.WHITE); 
-                       bufferGraphics2.fillOval(evt.getX(), evt.getY(), herramientas1.grosor, herramientas1.grosor); break;
-                
+            case 1000: x2= evt.getX();
+                    y2=evt.getY();
+                    s =  new BasicStroke(herramientas1.grosor);
+                    if (x1!=x2 || y1!=y2){
+                        bufferGraphics2.setColor(Color.WHITE);
+                        bufferGraphics2.setStroke(s);
+                        bufferGraphics2.drawLine(x1, y1, x2, y2);
+                        x1=x2;
+                        y1=y2;
+                    }
+                    break;   
         }
-        
-        
         repaint(0,0,1,1); //primero se pinta en la memoria y el repaint sirve para que se muestre en el jPanel1.
+        
     }//GEN-LAST:event_jPanel1MouseDragged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
@@ -433,8 +441,11 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                 
             case 256:  miForma = new Estrella(evt.getX(), evt.getY(), 256, panelColores1.colorSeleccionado, herramientas1.relleno);
                        miForma.dibujate(bufferGraphics, evt.getX(), evt.getY()); break;
-                       
-            case 1000: break; //Para la goma de borrar.
+                     
+            //Para la goma de borrar.           
+            case 1000: x1  = evt.getX();
+                       y1 = evt.getY();
+                       break; 
            
         }
         
@@ -444,12 +455,16 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
-        //Esto va a hacer que finalmente se guarde la forma elegida, SALVO EL CÍRCULO. (SOLUCIONADO CÍRCULO) 
+        //Esto va a hacer que finalmente se guarde la forma elegida. 
         miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY()); 
          
         //Para el círculo, que se mantenga en la pantalla después de soltar el ratón. 
         if (herramientas1.formaElegida == 1) {
             miCirculo.dibujate(bufferGraphics2, evt.getX());
+        }
+        else if (herramientas1.formaElegida == 11) {
+            bufferGraphics2.drawLine(x1, y1, x2, y2);
+            
         }
 
 
@@ -511,11 +526,25 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        
+        //Va a hacer que borre todo el buffer. 
+        jPanel1.removeAll();
+        jPanel1.repaint();
+        bufferGraphics2.setColor(Color.WHITE);
+        bufferGraphics2.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+        bufferGraphics.setColor(Color.WHITE);
+        bufferGraphics.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+        repaint(0,0,1,1);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-       
+        //Crea un nuevo documento.
+        jPanel1.removeAll();
+        jPanel1.repaint();
+        bufferGraphics2.setColor(Color.WHITE);
+        bufferGraphics2.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+        bufferGraphics.setColor(Color.WHITE);
+        bufferGraphics.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+        repaint(0,0,1,1);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
     
     
