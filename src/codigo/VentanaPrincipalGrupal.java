@@ -159,6 +159,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         panelColores1 = new codigo.PanelColores();
         herramientas1 = new codigo.Herramientas();
         jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -259,6 +260,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             }
         });
 
+        jTextField1.setText("jTextField1");
+
         jMenu1.setText("File");
 
         jMenuItem1.setText("Save");
@@ -310,9 +313,12 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                 .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -324,10 +330,15 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                     .addComponent(herramientas1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -403,6 +414,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 2: miRecta = new Line2D.Double();
                     miRecta.x1  = evt.getX();
                     miRecta.y1 = evt.getY();
+                    
                     break;    
              
             case 3: miForma = new TrianguloEquilatero(evt.getX(), evt.getY(), 3, panelColores1.colorSeleccionado, herramientas1.relleno);
@@ -433,6 +445,11 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 11: x1  = evt.getX();
                      y1 = evt.getY();
                      break;
+                     
+            //Para el texto, que se va a pintar donde se haga click en el Panel.
+            case 20: bufferGraphics2.setColor(panelColores1.colorSeleccionado);
+                     bufferGraphics2.drawString(jTextField1.getText(), evt.getX(), evt.getY());
+                     break;
             
             //Para la pipeta
             case 88: int color = buffer.getRGB(evt.getX(), evt.getY());
@@ -455,16 +472,20 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
-        //Esto va a hacer que finalmente se guarde la forma elegida. 
-        miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY()); 
-         
-        //Para el círculo, que se mantenga en la pantalla después de soltar el ratón. 
-        if (herramientas1.formaElegida == 1) {
-            miCirculo.dibujate(bufferGraphics2, evt.getX());
-        }
-        else if (herramientas1.formaElegida == 11) {
-            bufferGraphics2.drawLine(x1, y1, x2, y2);
-            
+        
+        switch (herramientas1.formaElegida) {
+            case 1:
+                miCirculo.dibujate(bufferGraphics2, evt.getX());
+                break;
+            case 11:
+                bufferGraphics2.drawLine(x1, y1, x2, y2);
+                break;
+            case 2:
+                bufferGraphics2.setColor(panelColores1.colorSeleccionado);
+                bufferGraphics2.draw(miRecta);
+                break;
+            default:miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
+                break;
         }
 
 
@@ -604,6 +625,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextField1;
     private codigo.PanelColores panelColores1;
     // End of variables declaration//GEN-END:variables
 }
