@@ -15,9 +15,10 @@ import codigo.formas.Heptagono;
 import codigo.formas.Hexagono;
 import codigo.formas.Octogono;
 import codigo.formas.Pentagono;
-import codigo.formas.Recta;
 import codigo.formas.TrianguloEquilatero;
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
@@ -47,6 +48,8 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     Line2D.Double miRecta = null;
     //creamos 2 coordenada y las declaramos
     int x1,x2,y1,y2 = 0;
+    //Para que el relleno se pueda hacer con todas las formas
+    BasicStroke s;
     
         
     /**
@@ -109,6 +112,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         herramientas1 = new codigo.Herramientas();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        textField1 = new java.awt.TextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -207,6 +211,13 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             .addGap(0, 367, Short.MAX_VALUE)
         );
 
+        textField1.setText("textField1");
+        textField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textField1ActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("File");
 
         jMenuItem1.setText("Guardar");
@@ -237,7 +248,9 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(65, 65, 65)
+                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(92, 92, 92)
                 .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,7 +261,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(89, Short.MAX_VALUE))))
+                        .addContainerGap(23, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,9 +274,12 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                             .addComponent(panelColores1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(220, 220, 220)
+                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(herramientas1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -287,6 +303,7 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
                     miRecta.x2  = evt.getX();
                     miRecta.y2 = evt.getY();
                     bufferGraphics.draw(miRecta);
+                    bufferGraphics2.draw(miRecta);
             break;            
             case 3 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 4 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
@@ -298,11 +315,12 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             case 10 : miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 256: miForma.dibujate(bufferGraphics, evt.getX(), evt.getY());break;
             case 1000: bufferGraphics2.setColor(Color.WHITE); 
-                       bufferGraphics2.fillOval(evt.getX(), evt.getY(), 10, 10);break;
+                       bufferGraphics2.fillOval(evt.getX(), evt.getY(),herramientas1.grosor, herramientas1.grosor);break;
             case 11: // guardo el fin del trazo en el que estoy y lo pinta y inicializamos
                 //el siguiente trazo con el fin del anterior.
                 x2= evt.getX();
                 y2=evt.getY();
+                s = new BasicStroke(herramientas1.grosor);
                 if (x1!=x2 || y1!=y2){
                     bufferGraphics2.setColor(panelColores1.colorSeleccionado);
                     bufferGraphics2.drawLine(x1, y1, x2, y2);
@@ -361,27 +379,45 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             //usa los eventos del raton y guarda los puntos del siguiente trazo.
             case 11: x1  = evt.getX();
                      y1 = evt.getY();break;
+            case 88: 
+                //este es para hacer la pipeta para obtener el color donde se pincha en PosX y PosY.
+                
+                int color =buffer.getRGB(evt.getX(), evt.getY());
+                //Asignar al color seleccionado el color que he pinchado
+                panelColores1.colorSeleccionado = new Color(color);
+                //cambia el fondo del cuadro de colores
+                panelColores1.cambiarFondo(panelColores1.colorSeleccionado);
+                
+            break;
+            
+            case 20:
+                //SE ELIGE LA FUENTE DEL TEXTO Y ADEMAS SE DIBUJA EL TEXTO
+                //CORRESPONDIENTE EN EL BUFFERGRAPHICS 2D EN UNA POSICION X E Y.
+                bufferGraphics2.setColor(Color.BLACK);
+                bufferGraphics2.drawString(textField1.getText(), evt.getX(), evt.getY());
+                
+                break;
+            
         }
+         repaint(0,0,1,1);
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
+        
         /*miForma.dibujate(bufferGraphics2, evt.getX(), evt.getY());
         //Si es el circulo lo dibuja sobre el buffer 2.
         if (herramientas1.formaElegida == 1){
             miCirculo.dibujate(bufferGraphics2, evt.getX());
         }
         */
-        miRecta.x2  = evt.getX();
-        miRecta.y2 = evt.getY();
         
-        bufferGraphics2.setColor(panelColores1.colorSeleccionado);
-        bufferGraphics2.draw(miRecta);
         
         
     }//GEN-LAST:event_jPanel1MouseReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jDialog1.setVisible(true);
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -435,6 +471,10 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textField1ActionPerformed
     
     
     
@@ -492,5 +532,6 @@ public class VentanaPrincipalGrupal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private codigo.PanelColores panelColores1;
+    private java.awt.TextField textField1;
     // End of variables declaration//GEN-END:variables
 }
